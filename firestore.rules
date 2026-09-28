@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function: check if caller is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper function: check if caller has administrative privileges
+    function isAdmin() {
+      return isAuthenticated() && (
+        request.auth.token.email == 'shauryavikramsingh02@gmail.com' ||
+        request.auth.token.admin == true
+      );
+    }
+    
+    // Helper function: check if document belongs to current user
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Default deny rule
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Screenings collection
+    // Accessible by the clinician owner or clinical administrators
+    match /screenings/{screeningId} {
+      allow read, write: if isAuthenticated() && (
+        resource == null ||
+        resource.data.userId == request.auth.uid ||
+        request.resource.data.userId == request.auth.uid ||
+        isAdmin()
+      );
+      allow delete: if isAdmin();
+    }
+
+    // Bookings / Referrals collection
+    // Clinicians can create referrals; Admins have full read/write/update access
+    match /bookings/{bookingId} {
+      allow read: if isAuthenticated();
+      allow create: if isAuthenticated();
+      allow update, delete: if isAdmin();
+    }
+
+    // Users & Clinician Profiles collection
+    // Users can read/write their own profile; Admins have full access
+    match /users/{userId} {
+      allow read: if isAuthenticated();
+      allow create, update: if isOwner(userId) || isAdmin();
+      allow delete: if isAdmin();
+    }
+  }
+}

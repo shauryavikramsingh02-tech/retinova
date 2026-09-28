@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RetinaScan AI - Point-of-Care Retinal Capture</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "primary-fixed-dim": "#bec6e0",
+            "on-primary-fixed": "#131b2e",
+            "inverse-on-surface": "#eaf1ff",
+            "surface-container-high": "#dce9ff",
+            "surface-container": "#e5eeff",
+            "on-secondary-container": "#006f66",
+            "on-primary-fixed-variant": "#3f465c",
+            "outline-variant": "#c6c6cd",
+            "secondary-fixed": "#89f5e7",
+            "primary-fixed": "#dae2fd",
+            "surface-tint": "#565e74",
+            "secondary": "#006a61",
+            "tertiary-fixed-dim": "#4cd7f6",
+            "inverse-primary": "#bec6e0",
+            "surface-dim": "#cbdbf5",
+            "surface-container-low": "#eff4ff",
+            "on-tertiary-fixed-variant": "#004e5c",
+            "inverse-surface": "#213145",
+            "on-error": "#ffffff",
+            "surface-variant": "#d3e4fe",
+            "tertiary-container": "#001f26",
+            "on-primary-container": "#7c839b",
+            "secondary-fixed-dim": "#6bd8cb",
+            "secondary-container": "#86f2e4",
+            "tertiary-fixed": "#acedff",
+            "on-secondary-fixed": "#00201d",
+            "on-tertiary-container": "#0090a9",
+            "on-background": "#0b1c30",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#005049",
+            "tertiary": "#000000",
+            "background": "#f8f9ff",
+            "outline": "#76777d",
+            "primary-container": "#131b2e",
+            "error-container": "#ffdad6",
+            "primary": "#000000",
+            "surface-bright": "#f8f9ff",
+            "on-surface-variant": "#45464d",
+            "surface": "#f8f9ff",
+            "surface-container-highest": "#d3e4fe",
+            "on-error-container": "#93000a",
+            "on-primary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary-fixed": "#001f26",
+            "on-surface": "#0b1c30"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "unit-8": "2rem",
+            "gutter-md": "1rem",
+            "unit-6": "1.5rem",
+            "gutter-sm": "0.75rem",
+            "viewer-min-w": "480px",
+            "sidebar-w": "260px",
+            "unit-3": "0.75rem",
+            "unit-5": "1.25rem",
+            "unit-10": "2.5rem",
+            "unit-12": "3rem",
+            "unit-2": "0.5rem",
+            "unit-4": "1rem",
+            "gutter-lg": "1.5rem",
+            "unit-1": "0.25rem"
+          },
+          "fontFamily": {
+            "headline-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "body-md": ["Inter", "sans-serif"],
+            "display-lg-mobile": ["Plus Jakarta Sans", "sans-serif"],
+            "headline-md": ["Plus Jakarta Sans", "sans-serif"],
+            "title-md": ["Inter", "sans-serif"],
+            "metric-xl": ["Plus Jakarta Sans", "sans-serif"],
+            "body-sm": ["Inter", "sans-serif"],
+            "display-lg": ["Plus Jakarta Sans", "sans-serif"],
+            "label-md": ["Inter", "sans-serif"],
+            "label-sm": ["Inter", "sans-serif"],
+            "body-lg": ["Inter", "sans-serif"],
+            "headline-lg-mobile": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          "fontSize": {
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "display-lg-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "metric-xl": ["32px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    };
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    .hud-reticle {
+      animation: pulse-reticle 2.4s ease-in-out infinite;
+    }
+    @keyframes pulse-reticle {
+      0%, 100% { transform: scale(1); opacity: 0.85; }
+      50% { transform: scale(1.025); opacity: 1; }
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased select-none min-h-screen pb-24 pt-14">
+<!-- TOP APP BAR (Shared Component Anchor) -->
+<header class="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-gutter-sm h-unit-12 bg-surface-container-lowest border-b border-outline-variant shadow-none">
+<div class="flex items-center gap-unit-2">
+<button aria-label="Sync status" class="flex items-center justify-center p-unit-1 rounded hover:bg-surface-container-high text-on-surface active:scale-95 transition-transform duration-150">
+<span class="material-symbols-outlined text-primary" data-icon="sync">sync</span>
+</button>
+<span class="font-title-md text-title-md text-on-surface tracking-tight uppercase">RetinaScan AI</span>
+</div>
+<!-- Center Clinical Badge: Patient Identifier & Status -->
+<div class="flex items-center gap-unit-2 bg-surface-container-low px-unit-2 py-unit-1 rounded border border-outline-variant">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">#PT-84920</span>
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<div class="flex items-center gap-unit-1 text-on-surface-variant text-[11px]">
+<span class="material-symbols-outlined text-[14px]" data-icon="wifi_off">wifi_off</span>
+<span class="font-label-sm text-label-sm">Local Queue</span>
+</div>
+</div>
+<!-- Trailing Action: Patient Eye Toggle OD / OS -->
+<div class="flex items-center">
+<div class="inline-flex bg-surface-container-low p-0.5 rounded border border-outline-variant">
+<button class="px-unit-2 py-0.5 rounded font-label-sm text-label-sm bg-primary-container text-on-primary font-bold transition-all shadow-sm" id="od-btn">OD</button>
+<button class="px-unit-2 py-0.5 rounded font-label-sm text-label-sm text-on-surface-variant font-semibold hover:bg-surface-container transition-all" id="os-btn">OS</button>
+</div>
+</div>
+</header>
+<!-- MAIN VIEWPORT CONTAINER -->
+<main class="w-full max-w-md mx-auto px-unit-3 flex flex-col gap-unit-3">
+<!-- SUB-BAR: Device Telemetry Indicators -->
+<div class="flex items-center justify-between px-unit-1 text-on-surface-variant text-label-sm font-label-sm">
+<div class="flex items-center gap-unit-2">
+<span class="flex items-center gap-0.5">
+<span class="material-symbols-outlined text-base" data-icon="battery_horiz_075">battery_horiz_075</span>
+<span>88%</span>
+</span>
+<span class="flex items-center gap-0.5 text-secondary">
+<span class="material-symbols-outlined text-base" data-icon="smartphone">smartphone</span>
+<span>Volk iNview 2</span>
+</span>
+</div>
+<div class="flex items-center gap-unit-1">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">OD: Right Eye Selected</span>
+</div>
+</div>
+<!-- CAMERA FUNDUS VIEWPORT (Level 1 Medical Card with Imaging Field) -->
+<div class="relative w-full aspect-[4/5] bg-black rounded-xl border border-outline-variant overflow-hidden shadow-sm flex items-center justify-center">
+<!-- Live Fundus Preview Simulation Background -->
+<img class="absolute inset-0 w-full h-full object-cover opacity-90 filter contrast-125" data-alt="A macro retinal fundus medical photograph capturing the optic disc, radiant red retinal blood vessels, and the darkened macula center against a deep orange choroid surface. The clinical imaging is sharp, high-contrast, free from glare, illuminated with clean optical coaxial light, suitable for diagnostic diabetic retinopathy screening." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDANFDSMAimc8bKwV8-l54NhrJs1ln6xEtqrU4JeqXgZo9056SKABUeCRkFKpZQ0ACKYZV7fCp_nClR-w8O0eWSFYbSiqJxdyscsb5nWDn-CIdvjjflE9aFmZ7j4DOwYDOeHUqE5769hnF5fZ7ZTbaPhAxdEswia7jquTC2waVDoTxn0iJkC6R8rxMPgd_tWdZAqb9oBs9LAySdpA5aHYNqJI4tTyz2chiZ4FL885T-TjumlI8n8BTk"/>
+<!-- High-Contrast Medical Camera HUD Overlays -->
+<div class="absolute inset-0 pointer-events-none flex flex-col justify-between p-unit-3">
+<!-- Top HUD Row: Alignment Quality & Live Optical Pass Badge -->
+<div class="flex items-center justify-between z-10">
+<div class="bg-surface-container-lowest/90 backdrop-blur-sm border border-secondary px-unit-2 py-1 rounded shadow-sm flex items-center gap-unit-1">
+<span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
+<span class="material-symbols-outlined text-secondary text-sm" data-icon="verified">verified</span>
+<span class="font-label-sm text-label-sm font-bold text-on-secondary-container tracking-wide">PASS 94% · GRADEABLE</span>
+</div>
+<div class="bg-black/60 backdrop-blur-sm border border-outline-variant/40 px-unit-2 py-1 rounded flex items-center gap-unit-1 text-white">
+<span class="material-symbols-outlined text-xs text-secondary-fixed" data-icon="hdr_auto">hdr_auto</span>
+<span class="font-label-sm text-label-sm">50° FOV</span>
+</div>
+</div>
+<!-- Center Reticle: Assisted Alignment Circle & Macula Crosshair -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<!-- Alignment Outer Perimeter -->
+<div class="relative w-64 h-64 rounded-full border border-secondary-fixed/50 border-dashed hud-reticle flex items-center justify-center">
+<!-- Center Crosshair for Macula Alignment -->
+<div class="w-12 h-12 border-t border-b border-secondary-fixed/70 relative">
+<div class="absolute inset-x-0 top-1/2 -translate-y-1/2 h-full border-l border-r border-secondary-fixed/70"></div>
+<div class="absolute inset-0 m-auto w-2 h-2 rounded-full bg-secondary-fixed shadow-[0_0_8px_#89f5e7]"></div>
+</div>
+<!-- Optic Disc Target Guide Box -->
+<div class="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 rounded-full border border-secondary/60 bg-secondary/10 flex items-center justify-center">
+<span class="font-label-sm text-[9px] text-secondary-fixed tracking-wider font-bold">DISC</span>
+</div>
+<!-- Optical Grid Tick Marks -->
+<div class="absolute top-2 w-1 h-2 bg-secondary-fixed"></div>
+<div class="absolute bottom-2 w-1 h-2 bg-secondary-fixed"></div>
+<div class="absolute left-2 w-2 h-1 bg-secondary-fixed"></div>
+<div class="absolute right-2 w-2 h-1 bg-secondary-fixed"></div>
+</div>
+</div>
+<!-- Bottom HUD Row: Live Viewfinder Status Callout -->
+<div class="flex items-end justify-between z-10">
+<div class="flex items-center gap-unit-1 bg-black/70 backdrop-blur-sm px-unit-2 py-0.5 rounded border border-outline/30 text-white font-label-sm text-[10px]">
+<span class="material-symbols-outlined text-xs text-secondary-fixed" data-icon="videocam">videocam</span>
+<span>60 FPS RAW · 4K LENS COUPLER</span>
+</div>
+<!-- Micro Zoom / FOV Indicator -->
+<div class="bg-black/70 px-unit-2 py-0.5 rounded border border-outline/30 text-white font-label-sm text-[10px]">
+<span>1.2x OPTICAL</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Overlay Controls inside the Viewport -->
+<div class="absolute right-unit-2 top-14 flex flex-col gap-unit-2 z-20">
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high active:scale-95 transition-transform" title="Grid Guide">
+<span class="material-symbols-outlined text-base" data-icon="grid_4x4">grid_4x4</span>
+</button>
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest/80 backdrop-blur-sm border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high active:scale-95 transition-transform" title="Vascular Filter">
+<span class="material-symbols-outlined text-base" data-icon="filter_vintage">filter_vintage</span>
+</button>
+</div>
+</div>
+<!-- LIVE TELEMETRY CHIPS -->
+<div class="grid grid-cols-3 gap-unit-2">
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-unit-2 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="filter_center_focus">filter_center_focus</span>
+          Macula Pos
+        </span>
+<span class="font-title-md text-title-md text-on-surface font-semibold mt-0.5">96% Centered</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-unit-2 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="contrast">contrast</span>
+          Sharpness
+        </span>
+<span class="font-title-md text-title-md text-on-surface font-semibold mt-0.5">Optimal</span>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-unit-2 flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-xs text-secondary" data-icon="motion_photos_off">motion_photos_off</span>
+          Motion Blur
+        </span>
+<span class="font-title-md text-title-md text-on-surface font-semibold mt-0.5">Zero (0.02)</span>
+</div>
+</div>
+<!-- HARDWARE DIAGNOSTIC CONTROLS (Dense Medical Ergonomics) -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-unit-3 flex flex-col gap-unit-3">
+<!-- Row 1: Illumination Range & Intensity Slider -->
+<div class="flex items-center justify-between gap-unit-3">
+<div class="flex items-center gap-unit-1 min-w-[100px]">
+<span class="material-symbols-outlined text-base text-on-surface" data-icon="light_mode">light_mode</span>
+<span class="font-label-md text-label-md text-on-surface">LED Lumens</span>
+</div>
+<div class="flex-1 flex items-center gap-unit-2">
+<input class="w-full h-1.5 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-secondary" max="100" min="10" type="range" value="65"/>
+<span class="font-label-sm text-label-sm font-bold text-on-surface min-w-[28px]">65%</span>
+</div>
+</div>
+<div class="h-px bg-outline-variant/60"></div>
+<!-- Row 2: Toggles for AF/MF, Polarizer, Flash -->
+<div class="grid grid-cols-3 gap-unit-2">
+<!-- AF / MF Toggle -->
+<button class="flex items-center justify-center gap-unit-1 py-1.5 px-unit-2 rounded bg-surface-container-low border border-outline-variant text-on-surface font-label-sm text-label-sm font-semibold hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-sm text-secondary" data-icon="autofocus_high">humerus</span>
+<span>Auto Focus</span>
+</button>
+<!-- Polarizing Filter -->
+<button class="flex items-center justify-center gap-unit-1 py-1.5 px-unit-2 rounded bg-secondary-container text-on-secondary-container border border-secondary font-label-sm text-label-sm font-semibold hover:bg-secondary-container/80 transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="lens_blur">lens_blur</span>
+<span>Polarized</span>
+</button>
+<!-- Flash Strobe -->
+<button class="flex items-center justify-center gap-unit-1 py-1.5 px-unit-2 rounded bg-surface-container-low border border-outline-variant text-on-surface font-label-sm text-label-sm font-semibold hover:bg-surface-container transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="flash_on">flash_on</span>
+<span>Strobe 1/80</span>
+</button>
+</div>
+</div>
+<!-- PRIMARY ACTION CLUSTER: Shutter + Instant Inference -->
+<div class="flex items-center gap-unit-3 pt-unit-1 pb-2">
+<!-- Secondary Action: Flip Lens / Hardware Attachment Switch -->
+<button class="w-12 h-12 rounded-lg bg-surface-container-lowest border border-outline-variant flex items-center justify-center text-on-surface hover:bg-surface-container-high active:scale-95 transition-all shadow-sm" title="Toggle Optical Attachment Source">
+<span class="material-symbols-outlined text-xl" data-icon="flip_camera_ios">flip_camera_ios</span>
+</button>
+<!-- Center Tactile Shutter Button with Haptic Ring -->
+<div class="flex-1 flex justify-center">
+<button aria-label="Capture Retinal Frame" class="relative group p-1 rounded-full border-2 border-primary-container bg-surface-container-low hover:border-secondary transition-all active:scale-90" id="shutter-trigger">
+<div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-on-primary group-hover:bg-primary-container transition-colors shadow-md">
+<span class="material-symbols-outlined text-2xl" data-icon="photo_camera">photo_camera</span>
+</div>
+</button>
+</div>
+<!-- Quick AI Trigger Action -->
+<button class="w-12 h-12 rounded-lg bg-secondary text-on-secondary flex flex-col items-center justify-center active:scale-95 transition-all shadow-sm" title="Execute Direct Inference">
+<span class="material-symbols-outlined text-xl" data-icon="smart_toy">smart_toy</span>
+<span class="font-label-sm text-[9px] uppercase font-bold tracking-tight">AI Run</span>
+</button>
+</div>
+<!-- INLINE ON-DEVICE AI STATUS BANNER -->
+<div class="bg-surface-container-low border border-outline-variant rounded p-unit-2 flex items-center justify-between">
+<div class="flex items-center gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-base" data-icon="neurology">neurology</span>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">DR &amp; Macular Edema Model v4.2</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Embedded CoreML · Latency ~45ms</span>
+</div>
+</div>
+<span class="font-label-sm text-label-sm font-semibold px-unit-2 py-0.5 bg-surface-container-lowest border border-outline-variant rounded text-on-surface">Ready</span>
+</div>
+</main>
+<!-- BOTTOM NAV BAR (Shared Component Anchor) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-gutter-sm h-unit-16 bg-surface-container-lowest border-t border-outline-variant shadow-none">
+<!-- Item 1: Queue -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-unit-3 py-unit-1 font-label-sm text-label-sm hover:bg-surface-container-high rounded active:scale-95 transition-transform duration-100 ease-out" href="#queue">
+<span class="material-symbols-outlined mb-0.5" data-icon="format_list_bulleted">format_list_bulleted</span>
+<span>Queue</span>
+</a>
+<!-- Item 2: Capture (ACTIVE DESTINATION) -->
+<a class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-lg px-unit-3 py-unit-1 font-label-sm text-label-sm active:scale-95 transition-transform duration-100 ease-out font-semibold" href="#capture">
+<span class="material-symbols-outlined mb-0.5" data-icon="photo_camera" style="font-variation-settings: 'FILL' 1;">photo_camera</span>
+<span>Capture</span>
+</a>
+<!-- Item 3: AI Report -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-unit-3 py-unit-1 font-label-sm text-label-sm hover:bg-surface-container-high rounded active:scale-95 transition-transform duration-100 ease-out" href="#report">
+<span class="material-symbols-outlined mb-0.5" data-icon="analytics">analytics</span>
+<span>AI Report</span>
+</a>
+<!-- Item 4: Referral -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant px-unit-3 py-unit-1 font-label-sm text-label-sm hover:bg-surface-container-high rounded active:scale-95 transition-transform duration-100 ease-out" href="#referral">
+<span class="material-symbols-outlined mb-0.5" data-icon="emergency_share">emergency_share</span>
+<span>Referral</span>
+</a>
+</nav>
+<!-- Lightweight Medical Interaction Script -->
+<script>
+    // Quick Eye selection toggle logic
+    const odBtn = document.getElementById('od-btn');
+    const osBtn = document.getElementById('os-btn');
+    const shutter = document.getElementById('shutter-trigger');
+
+    odBtn.addEventListener('click', () => {
+      odBtn.className = "px-unit-2 py-0.5 rounded font-label-sm text-label-sm bg-primary-container text-on-primary font-bold transition-all shadow-sm";
+      osBtn.className = "px-unit-2 py-0.5 rounded font-label-sm text-label-sm text-on-surface-variant font-semibold hover:bg-surface-container transition-all";
+    });
+
+    osBtn.addEventListener('click', () => {
+      osBtn.className = "px-unit-2 py-0.5 rounded font-label-sm text-label-sm bg-primary-container text-on-primary font-bold transition-all shadow-sm";
+      odBtn.className = "px-unit-2 py-0.5 rounded font-label-sm text-label-sm text-on-surface-variant font-semibold hover:bg-surface-container transition-all";
+    });
+
+    // Shutter tactile visual feedback
+    shutter.addEventListener('click', () => {
+      shutter.classList.add('ring-4', 'ring-secondary');
+      setTimeout(() => {
+        shutter.classList.remove('ring-4', 'ring-secondary');
+      }, 200);
+    });
+  </script>
+</body></html>

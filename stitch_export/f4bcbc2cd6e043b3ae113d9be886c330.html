@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RetinaScan AI - Quality Check & Optical Verification</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=inter:wght@100..900&family=plusJakartaSans:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration Verbatim -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "outline": "#76777d",
+            "on-primary-container": "#7c839b",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "primary-fixed": "#dae2fd",
+            "on-tertiary-fixed-variant": "#004e5c",
+            "on-primary": "#ffffff",
+            "tertiary": "#000000",
+            "on-secondary-container": "#006f66",
+            "background": "#f8f9ff",
+            "on-primary-fixed-variant": "#3f465c",
+            "surface-container-highest": "#d3e4fe",
+            "secondary": "#006a61",
+            "primary-fixed-dim": "#bec6e0",
+            "surface-container-low": "#eff4ff",
+            "on-tertiary-container": "#0090a9",
+            "secondary-container": "#86f2e4",
+            "surface-bright": "#f8f9ff",
+            "tertiary-fixed-dim": "#4cd7f6",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-fixed": "#001f26",
+            "primary-container": "#131b2e",
+            "primary": "#000000",
+            "on-error-container": "#93000a",
+            "error": "#ba1a1a",
+            "on-secondary-fixed-variant": "#005049",
+            "surface-tint": "#565e74",
+            "surface": "#f8f9ff",
+            "surface-dim": "#cbdbf5",
+            "surface-variant": "#d3e4fe",
+            "surface-container-high": "#dce9ff",
+            "inverse-on-surface": "#eaf1ff",
+            "on-surface-variant": "#45464d",
+            "surface-container-lowest": "#ffffff",
+            "surface-container": "#e5eeff",
+            "secondary-fixed": "#89f5e7",
+            "on-secondary-fixed": "#00201d",
+            "outline-variant": "#c6c6cd",
+            "inverse-surface": "#213145",
+            "on-secondary": "#ffffff",
+            "tertiary-fixed": "#acedff",
+            "inverse-primary": "#bec6e0",
+            "on-primary-fixed": "#131b2e",
+            "on-background": "#0b1c30",
+            "secondary-fixed-dim": "#6bd8cb",
+            "tertiary-container": "#001f26",
+            "on-surface": "#0b1c30"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "gutter-lg": "1.5rem",
+            "unit-1": "0.25rem",
+            "unit-6": "1.5rem",
+            "unit-4": "1rem",
+            "unit-3": "0.75rem",
+            "unit-8": "2rem",
+            "gutter-md": "1rem",
+            "gutter-sm": "0.75rem",
+            "viewer-min-w": "480px",
+            "unit-10": "2.5rem",
+            "unit-5": "1.25rem",
+            "unit-12": "3rem",
+            "unit-2": "0.5rem",
+            "sidebar-w": "260px"
+          },
+          "fontFamily": {
+            "display-lg-mobile": ["plusJakartaSans"],
+            "headline-lg-mobile": ["plusJakartaSans"],
+            "body-lg": ["inter"],
+            "title-md": ["inter"],
+            "body-sm": ["inter"],
+            "label-md": ["inter"],
+            "metric-xl": ["plusJakartaSans"],
+            "body-md": ["inter"],
+            "label-sm": ["inter"],
+            "display-lg": ["plusJakartaSans"],
+            "headline-lg": ["plusJakartaSans"],
+            "headline-md": ["plusJakartaSans"]
+          },
+          "fontSize": {
+            "display-lg-mobile": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg-mobile": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "body-lg": ["15px", { "lineHeight": "22px", "fontWeight": "400" }],
+            "title-md": ["16px", { "lineHeight": "22px", "letterSpacing": "-0.005em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "600" }],
+            "metric-xl": ["32px", { "lineHeight": "36px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "display-lg": ["40px", { "lineHeight": "48px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-md": ["20px", { "lineHeight": "26px", "letterSpacing": "-0.01em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface h-full flex flex-col font-body-md text-body-md antialiased overflow-x-hidden selection:bg-secondary-container selection:text-on-secondary-container">
+<!-- ========================================== -->
+<!-- TOP APP BAR (Shared Component: TopNavBar)  -->
+<!-- ========================================== -->
+<header class="w-full px-gutter-lg flex justify-between items-center h-16 max-w-full bg-surface-container-lowest dark:bg-primary-container border-b border-outline-variant dark:border-outline shadow-sm dark:shadow-none z-30 sticky top-0">
+<div class="flex items-center gap-unit-6">
+<!-- Brand Logo -->
+<div class="flex items-center gap-unit-2">
+<div class="w-8 h-8 rounded-lg bg-secondary flex items-center justify-center text-on-secondary">
+<span class="material-symbols-outlined text-[20px]" data-icon="visibility">visibility</span>
+</div>
+<span class="font-headline-md text-headline-md font-bold tracking-tight text-on-surface dark:text-inverse-on-surface">RetinaScan AI</span>
+</div>
+<!-- Main Navigation Links: Active = 'Quality Check' -->
+<nav class="hidden md:flex items-center gap-unit-5 pl-unit-4 border-l border-outline-variant">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface pb-1 hover:bg-surface-container-low dark:hover:bg-inverse-surface transition-colors duration-150" href="#">Patient Intake</a>
+<a class="border-b-2 border-secondary text-secondary dark:border-secondary-fixed dark:text-secondary-fixed font-title-md text-title-md pb-1" href="#">Quality Check</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface pb-1 hover:bg-surface-container-low dark:hover:bg-inverse-surface transition-colors duration-150" href="#">AI Diagnosis</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-outline-variant hover:text-on-surface dark:hover:text-inverse-on-surface pb-1 hover:bg-surface-container-low dark:hover:bg-inverse-surface transition-colors duration-150" href="#">Action Plan</a>
+</nav>
+</div>
+<!-- Trailing Actions & Diagnostic Security -->
+<div class="flex items-center gap-unit-3">
+<!-- Security / Protocol Badges -->
+<div class="flex items-center gap-unit-2 text-on-surface-variant text-body-sm px-unit-2 py-unit-1 bg-surface-container rounded-lg">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="verified_user">verified_user</span>
+<span class="font-label-sm text-label-sm tracking-wider">HIPAA 256-BIT</span>
+</div>
+<div class="flex items-center gap-unit-1 text-on-surface-variant">
+<button class="p-unit-2 hover:bg-surface-container-low rounded-lg transition-colors" title="Audit Lock">
+<span class="material-symbols-outlined text-[20px]" data-icon="lock">lock</span>
+</button>
+<button class="p-unit-2 hover:bg-surface-container-low rounded-lg transition-colors" title="Clinical Protocol Help">
+<span class="material-symbols-outlined text-[20px]" data-icon="help">help</span>
+</button>
+</div>
+<div class="h-6 w-px bg-outline-variant mx-unit-1"></div>
+<!-- Secondary Action -->
+<button class="px-unit-3 py-unit-2 text-on-surface-variant font-label-md text-label-md rounded-lg border border-outline-variant hover:bg-surface-container-low hover:text-on-surface transition-colors">
+        Export PDF
+      </button>
+<!-- Primary Action / Emergency Triage -->
+<button class="px-unit-3 py-unit-2 bg-error text-on-error font-label-md text-label-md rounded-lg hover:opacity-95 transition-opacity flex items-center gap-unit-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="notification_important">notification_important</span>
+        Emergency Triage
+      </button>
+<!-- Profile Avatar -->
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary border border-outline-variant flex items-center justify-center font-title-md text-title-md ml-unit-1" title="Chief Clinical Screener Profile Avatar">
+        DR
+      </div>
+</div>
+</header>
+<!-- ========================================== -->
+<!-- MAIN CLINICAL VIEWPORT & SIDEBAR LAYOUT   -->
+<!-- ========================================== -->
+<div class="flex-1 flex overflow-hidden">
+<!-- SIDEBAR NAVIGATION (Shared Component: SideNavBar) -->
+<aside class="hidden lg:flex flex-col justify-between h-full p-unit-4 w-sidebar-w bg-surface-container-lowest dark:bg-primary-container border-r border-outline-variant dark:border-outline flex-shrink-0 z-20">
+<div class="space-y-unit-4">
+<!-- System Hub Metadata -->
+<div class="px-unit-2 py-unit-1">
+<div class="flex items-center gap-unit-2 mb-unit-1">
+<span class="material-symbols-outlined text-secondary text-[22px]" data-icon="biotech">biotech</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface dark:text-inverse-on-surface leading-tight">RetinaScan AI Hub</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Clinical Protocol v4.2 • FDA/CE</p>
+</div>
+<!-- CTA: New Screening -->
+<button class="w-full flex items-center justify-center gap-unit-2 py-unit-2 px-unit-3 bg-secondary text-on-secondary font-title-md text-title-md rounded-lg hover:bg-opacity-90 transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[18px]" data-icon="add_circle">add_circle</span>
+          New Screening
+        </button>
+<!-- Main Protocol Steps -->
+<nav class="space-y-unit-1">
+<a class="flex items-center gap-unit-3 px-unit-4 py-unit-3 text-on-surface-variant dark:text-outline-variant font-body-md text-body-md hover:bg-surface-container-low dark:hover:bg-inverse-surface rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assignment_ind">assignment_ind</span>
+<span>Intake Gateway</span>
+</a>
+<!-- Active tab: Pre-Scan Quality -->
+<a class="flex items-center gap-unit-3 px-unit-4 py-unit-3 bg-surface-container dark:bg-inverse-surface text-secondary dark:text-secondary-fixed font-title-md text-title-md rounded-lg border-l-4 border-secondary dark:border-secondary-fixed" href="#">
+<span class="material-symbols-outlined text-[20px] text-secondary" data-icon="center_focus_strong">center_focus_strong</span>
+<span>Pre-Scan Quality</span>
+</a>
+<a class="flex items-center gap-unit-3 px-unit-4 py-unit-3 text-on-surface-variant dark:text-outline-variant font-body-md text-body-md hover:bg-surface-container-low dark:hover:bg-inverse-surface rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="neurology">neurology</span>
+<span>Diagnostic Analysis</span>
+</a>
+<a class="flex items-center gap-unit-3 px-unit-4 py-unit-3 text-on-surface-variant dark:text-outline-variant font-body-md text-body-md hover:bg-surface-container-low dark:hover:bg-inverse-surface rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="clinical_notes">clinical_notes</span>
+<span>Action Plan & Referral</span>
+</a>
+</nav>
+</div>
+<!-- Footer navigation tabs -->
+<div class="border-t border-outline-variant pt-unit-3 space-y-unit-1">
+<a class="flex items-center gap-unit-3 px-unit-4 py-unit-2 text-on-surface-variant font-body-sm text-body-sm hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="shield">shield</span>
+<span>HIPAA Audit Logs</span>
+</a>
+<a class="flex items-center gap-unit-3 px-unit-4 py-unit-2 text-on-surface-variant font-body-sm text-body-sm hover:bg-surface-container-low rounded-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="settings">settings</span>
+<span>System Diagnostics</span>
+</a>
+</div>
+</aside>
+<!-- CENTRAL WORKSPACE CANVAS -->
+<main class="flex-1 flex flex-col overflow-y-auto bg-surface">
+<!-- ========================================== -->
+<!-- TOP CLINICAL PATIENT HEADER & STEPPER BANNER -->
+<!-- ========================================== -->
+<section class="w-full bg-surface-container-lowest border-b border-outline-variant px-gutter-lg py-unit-3">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-unit-4">
+<!-- Patient Dossier Snippet -->
+<div class="flex items-center gap-unit-4">
+<div class="w-11 h-11 rounded-lg bg-surface-container-high text-secondary flex items-center justify-center font-headline-md">
+<span class="material-symbols-outlined text-[26px]" data-icon="person">person</span>
+</div>
+<div>
+<div class="flex items-center gap-unit-3">
+<h1 class="font-title-md text-title-md text-on-surface font-bold">Patient: #PT-84920</h1>
+<span class="px-unit-2 py-0.5 rounded text-label-sm font-semibold bg-surface-container text-on-surface-variant border border-outline-variant">
+                  58 yo • Male
+                </span>
+<span class="px-unit-2 py-0.5 rounded text-label-sm font-semibold bg-error-container text-on-error-container">
+                  Type 2 Diabetes (7 yrs)
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-unit-1 mt-0.5">
+<span class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
+                Active Session encrypted (TLS 1.3) • Primary Screener: Dr. C. Miller, MD • Clinic ID: #NW-OPT-104
+              </p>
+</div>
+</div>
+<!-- Stepper Indicator: Step 2 of 4 -->
+<div class="flex items-center gap-unit-3 self-end md:self-auto bg-surface-container-low px-unit-4 py-unit-2 rounded-lg border border-outline-variant">
+<div class="text-right">
+<div class="font-label-sm text-label-sm uppercase tracking-wider text-secondary font-bold">Protocol Step 2 of 4</div>
+<div class="font-title-md text-title-md text-on-surface">Image Upload & Optical Quality Verification</div>
+</div>
+<div class="flex items-center gap-1">
+<div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+<div class="w-4 h-1 bg-secondary rounded-full"></div>
+<div class="w-6 h-2.5 rounded-full bg-secondary flex items-center justify-center text-[9px] font-bold text-on-secondary">2</div>
+<div class="w-4 h-1 bg-outline-variant rounded-full"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-outline-variant"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- ========================================== -->
+<!-- MAIN TWO-COLUMN DIAGNOSTIC GRID           -->
+<!-- ========================================== -->
+<div class="flex-1 p-gutter-lg max-w-7xl mx-auto w-full">
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-unit-6 items-start">
+<!-- ====================================== -->
+<!-- LEFT COLUMN: Eye Selection & Upload    -->
+<!-- ====================================== -->
+<div class="xl:col-span-7 space-y-unit-5">
+<!-- Card 1: Eye Selector & Modality -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-unit-4 shadow-sm">
+<div class="flex items-center justify-between mb-unit-3">
+<div class="flex items-center gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="remove_red_eye">remove_red_eye</span>
+<h2 class="font-title-md text-title-md text-on-surface font-semibold">Anatomical Eye Target Selection</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container px-unit-2 py-0.5 rounded">Standard ETDRS 7-Field</span>
+</div>
+<!-- Segmented Eye Selector -->
+<div class="grid grid-cols-2 gap-unit-3 bg-surface-container-low p-unit-1 rounded-lg border border-outline-variant">
+<!-- OD (Right Eye) Active Button -->
+<button class="flex items-center justify-center gap-unit-3 py-unit-2 px-unit-3 bg-surface-container-lowest rounded border border-secondary shadow-sm text-left transition-all">
+<div class="w-6 h-6 rounded-full border-2 border-secondary flex items-center justify-center">
+<div class="w-2.5 h-2.5 rounded-full bg-secondary"></div>
+</div>
+<div>
+<span class="block font-title-md text-title-md text-secondary font-bold">OD (Right Eye)</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant">Selected for Analysis</span>
+</div>
+<span class="material-symbols-outlined text-secondary ml-auto text-[18px]" data-icon="check_circle">check_circle</span>
+</button>
+<!-- OS (Left Eye) Inactive Button -->
+<button class="flex items-center justify-center gap-unit-3 py-unit-2 px-unit-3 bg-transparent rounded border border-transparent hover:border-outline-variant text-left transition-all opacity-70 hover:opacity-100">
+<div class="w-6 h-6 rounded-full border border-outline flex items-center justify-center"></div>
+<div>
+<span class="block font-title-md text-title-md text-on-surface font-medium">OS (Left Eye)</span>
+<span class="block font-label-sm text-label-sm text-on-surface-variant">Pending Capture</span>
+</div>
+<span class="material-symbols-outlined text-outline-variant ml-auto text-[18px]" data-icon="radio_button_unchecked">radio_button_unchecked</span>
+</button>
+</div>
+<!-- Fundus Camera Type Picker -->
+<div class="mt-unit-3 pt-unit-3 border-t border-outline-variant flex flex-wrap items-center justify-between gap-unit-2 text-body-sm text-on-surface-variant">
+<span class="font-label-md text-label-md">Hardware Source:</span>
+<div class="flex items-center gap-unit-2">
+<span class="px-unit-2 py-0.5 rounded bg-surface-container font-label-sm text-label-sm text-on-surface border border-outline-variant">Topcon NW400</span>
+<span class="px-unit-2 py-0.5 rounded hover:bg-surface-container font-label-sm text-label-sm cursor-pointer">Zeiss Clarus</span>
+<span class="px-unit-2 py-0.5 rounded hover:bg-surface-container font-label-sm text-label-sm cursor-pointer">Welch Allyn RetinaVue</span>
+<span class="px-unit-2 py-0.5 rounded hover:bg-surface-container font-label-sm text-label-sm cursor-pointer">Mobile Smartphone Adapter</span>
+</div>
+</div>
+</div>
+<!-- Card 2: Interactive Drag & Drop Area + Active Inspection Preview -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-unit-4 shadow-sm">
+<div class="flex items-center justify-between mb-unit-3">
+<div class="flex items-center gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-[20px]" data-icon="photo_camera">photo_camera</span>
+<h2 class="font-title-md text-title-md text-on-surface font-semibold">Fundus Photo Ingestion & High-Res Viewer</h2>
+</div>
+<span class="font-label-sm text-label-sm text-secondary bg-surface-container px-unit-2 py-0.5 rounded font-semibold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                  Ready For Inference
+                </span>
+</div>
+<!-- Retinal Frame Deep Field Container -->
+<div class="relative bg-primary-container rounded-lg overflow-hidden border border-outline-variant/30 flex flex-col items-center justify-center group">
+<!-- Ocular Fundus Image Preview -->
+<div class="w-full h-80 relative overflow-hidden flex items-center justify-center">
+<img class="object-cover w-full h-full transform transition-transform duration-300 group-hover:scale-105" data-alt="A ultra-high-resolution clinical color fundus photograph of a human right eye retina showing crisp optic disc contours, central macula, and detailed retinal vascular arcades against a deep clinical dark slate background. The medical imaging displays clear optical illumination with rich arterial and venous branching across an analytical dark blue viewport. The visual tone is strictly scientific, sharp, and diagnostic-grade." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzvreLirI8WDrgaZyrdiGCRw1GMPuFVbBfRU9kzmZrtcattumpqoDX3j28sK-wC17JSxN7fNgNQoYjeZQ3i2LjCFcByHdeTe1NlyO5SCovu0DL_QZ6qbBmvwod0z8PenJGbJEiVz7ABNo34D8P7glRESerCa5H1a1zVlcFt6Yo_RjZfb6J5EOfFC77FKXb4eDIMJvXJg3I6XJxCJRtKCs33dX0hCqrXyf46vOzJ9aqBuvvzoLuCowG"/>
+<!-- HUD Overlay Viewport Controls -->
+<div class="absolute top-unit-3 left-unit-3 flex items-center gap-unit-2 bg-inverse-surface/85 backdrop-blur-sm px-unit-3 py-1.5 rounded-lg border border-outline/40 text-inverse-on-surface">
+<span class="font-label-sm text-label-sm font-bold text-secondary-fixed">OD 45°</span>
+<span class="text-outline-variant">|</span>
+<span class="font-label-sm text-label-sm">Macula Centered</span>
+<span class="text-outline-variant">|</span>
+<span class="font-label-sm text-label-sm text-tertiary-fixed">4096 × 3072 px</span>
+</div>
+<!-- Floating Floating Inspection Tools -->
+<div class="absolute top-unit-3 right-unit-3 flex flex-col gap-unit-1 bg-inverse-surface/85 backdrop-blur-sm p-1 rounded-lg border border-outline/40 text-inverse-on-surface">
+<button class="p-1 hover:bg-outline-variant/30 rounded text-inverse-on-surface" title="Zoom In">
+<span class="material-symbols-outlined text-[18px]" data-icon="zoom_in">zoom_in</span>
+</button>
+<button class="p-1 hover:bg-outline-variant/30 rounded text-inverse-on-surface" title="Zoom Out">
+<span class="material-symbols-outlined text-[18px]" data-icon="zoom_out">zoom_out</span>
+</button>
+<button class="p-1 hover:bg-outline-variant/30 rounded text-inverse-on-surface" title="Red-Free Filter">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_vintage">filter_vintage</span>
+</button>
+<button class="p-1 hover:bg-outline-variant/30 rounded text-inverse-on-surface" title="Vascular Inversion">
+<span class="material-symbols-outlined text-[18px]" data-icon="contrast">contrast</span>
+</button>
+</div>
+<!-- AI Grid Alignment Crosshair Simulation -->
+<div class="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
+<div class="w-48 h-48 rounded-full border border-dashed border-secondary-fixed"></div>
+<div class="w-2 h-2 rounded-full bg-secondary-fixed absolute"></div>
+</div>
+<!-- Live Ingestion Status Banner -->
+<div class="absolute bottom-unit-3 left-unit-3 right-unit-3 flex items-center justify-between bg-inverse-surface/90 backdrop-blur-md px-unit-3 py-unit-2 rounded-lg border border-outline/40">
+<div class="flex items-center gap-unit-2">
+<span class="material-symbols-outlined text-secondary-fixed text-[18px]" data-icon="task_alt">task_alt</span>
+<span class="text-body-sm font-semibold text-inverse-on-surface">DICOM Loaded: RET_20250228_OD_001.dcm</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline-variant">Raw 16-bit • 24.8 MB</span>
+</div>
+</div>
+<!-- Dropzone Secondary Action Strip -->
+<div class="w-full bg-surface-container-low border-t border-outline-variant p-unit-3 flex flex-wrap items-center justify-between gap-unit-2">
+<div class="flex items-center gap-unit-2 text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="cloud_upload">cloud_upload</span>
+<span>Supports DICOM, TIFF, JPEG, PNG (Multi-frame or Single)</span>
+</div>
+<button class="px-unit-3 py-1.5 bg-surface-container-lowest hover:bg-surface-container border border-outline-variant text-on-surface font-label-md text-label-md rounded transition-colors flex items-center gap-unit-1">
+<span class="material-symbols-outlined text-[16px]" data-icon="swap_horiz">swap_horiz</span>
+                    Change Local File
+                  </button>
+</div>
+</div>
+<!-- HIPAA Consent Checkbox Requirement -->
+<div class="mt-unit-4 p-unit-3 rounded-lg bg-surface-container-low border border-outline-variant flex items-start gap-unit-3">
+<input checked="" class="mt-0.5 w-4 h-4 rounded border-outline text-secondary focus:ring-secondary focus:ring-offset-0" id="hipaa-consent" type="checkbox"/>
+<label class="text-body-sm text-on-surface cursor-pointer select-none" for="hipaa-consent">
+<span class="font-semibold block text-on-surface">HIPAA & GDPR Compliant AI Cloud Processing Consent Confirmed</span>
+<span class="text-on-surface-variant text-[11px] block mt-0.5">
+                    De-identified retinal biometric features will be transmitted via TLS 1.3 encrypted tunnel to RetinaScan Deep Learning Classifier. No raw patient PHI is stored on model inference nodes.
+                  </span>
+</label>
+</div>
+</div>
+</div>
+<!-- ====================================== -->
+<!-- RIGHT COLUMN: Real-Time QC Validation  -->
+<!-- ====================================== -->
+<div class="xl:col-span-5 space-y-unit-5">
+<!-- Card: Quality Score Gauge & Verdict -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-lg p-unit-5 shadow-sm">
+<div class="flex items-center justify-between border-b border-outline-variant pb-unit-3">
+<div>
+<h2 class="font-title-md text-title-md text-on-surface font-bold">Automated Optical QC Engine</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Real-time ISO 10940 Retinal Gradeability Standard</p>
+</div>
+<span class="px-unit-2 py-unit-1 bg-surface-container rounded font-label-sm text-label-sm text-on-surface font-mono">
+                  Latency: 142ms
+                </span>
+</div>
+<!-- Large Pass Verdict Tile -->
+<div class="mt-unit-4 p-unit-4 rounded-lg bg-surface-container-low border-2 border-secondary/40 flex items-center justify-between">
+<div class="flex items-center gap-unit-3">
+<div class="w-12 h-12 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[28px]" data-icon="check_circle">check_circle</span>
+</div>
+<div>
+<span class="font-label-sm text-label-sm tracking-wider uppercase font-bold text-secondary block">Optical Assessment Verdict</span>
+<span class="font-headline-md text-headline-md font-bold text-on-surface block">PASS (Diagnostic Grade)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Eligible for AI Diabetic Retinopathy Staging</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-metric-xl text-metric-xl text-secondary font-bold block leading-none">94</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">/ 100 PTS</span>
+</div>
+</div>
+<!-- Metric Progress Bar -->
+<div class="mt-unit-3">
+<div class="flex justify-between text-body-sm mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Overall Gradeability Index</span>
+<span class="font-label-sm text-label-sm font-bold text-secondary">94% (Threshold: ≥ 80%)</span>
+</div>
+<div class="w-full bg-surface-container-high h-2 rounded-full overflow-hidden">
+<div class="bg-secondary h-full rounded-full transition-all duration-500" style="width: 94%"></div>
+</div>
+</div>
+<!-- Automated QC Real-Time Checklist -->
+<div class="mt-unit-5 space-y-unit-3">
+<h3 class="font-label-md text-label-md uppercase tracking-wider text-on-surface-variant">Pre-Scan Telemetry Checklist</h3>
+<!-- 1. Focus & Sharpness -->
+<div class="p-unit-3 rounded-lg border border-outline-variant bg-surface-container-lowest flex items-start justify-between gap-unit-2">
+<div class="flex items-start gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" data-icon="center_focus_strong">center_focus_strong</span>
+<div>
+<div class="font-title-md text-title-md text-on-surface font-semibold">Optical Focus & Sharpness</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Sharp 3rd-order retinal vessels & optic disc cup boundary</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="px-unit-2 py-0.5 rounded bg-surface-container text-secondary border border-secondary/30 font-label-sm text-label-sm font-bold">
+                      Optimal (96%)
+                    </span>
+</div>
+</div>
+<!-- 2. Field of View & Centering -->
+<div class="p-unit-3 rounded-lg border border-outline-variant bg-surface-container-lowest flex items-start justify-between gap-unit-2">
+<div class="flex items-start gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" data-icon="adjust">adjust</span>
+<div>
+<div class="font-title-md text-title-md text-on-surface font-semibold">Field of View & Centering</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Macula centered, 45-degree standard retinal field verified</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="px-unit-2 py-0.5 rounded bg-surface-container text-secondary border border-secondary/30 font-label-sm text-label-sm font-bold">
+                      Centered (92%)
+                    </span>
+</div>
+</div>
+<!-- 3. Illumination & Exposure -->
+<div class="p-unit-3 rounded-lg border border-outline-variant bg-surface-container-lowest flex items-start justify-between gap-unit-2">
+<div class="flex items-start gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" data-icon="flare">flare</span>
+<div>
+<div class="font-title-md text-title-md text-on-surface font-semibold">Illumination & Exposure</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Balanced dynamic range, zero flash glare or underexposure</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="px-unit-2 py-0.5 rounded bg-surface-container text-secondary border border-secondary/30 font-label-sm text-label-sm font-bold">
+                      Balanced (95%)
+                    </span>
+</div>
+</div>
+<!-- 4. Artifacts & Blurs -->
+<div class="p-unit-3 rounded-lg border border-outline-variant bg-surface-container-lowest flex items-start justify-between gap-unit-2">
+<div class="flex items-start gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" data-icon="clean_hands">clean_hands</span>
+<div>
+<div class="font-title-md text-title-md text-on-surface font-semibold">Artifacts & Motion Blur</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Clear viewport, 0% eyelid or eyelash occlusion detected</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="px-unit-2 py-0.5 rounded bg-surface-container text-secondary border border-secondary/30 font-label-sm text-label-sm font-bold">
+                      Clear (98%)
+                    </span>
+</div>
+</div>
+<!-- 5. Pupil Dilation Check -->
+<div class="p-unit-3 rounded-lg border border-outline-variant bg-surface-container-lowest flex items-start justify-between gap-unit-2">
+<div class="flex items-start gap-unit-2">
+<span class="material-symbols-outlined text-secondary text-[20px] mt-0.5" data-icon="lens">lens</span>
+<div>
+<div class="font-title-md text-title-md text-on-surface font-semibold">Pupil Aperture Adequacy</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Non-mydriatic aperture estimated at 4.6mm (>4.0mm norm)</p>
+</div>
+</div>
+<div class="text-right flex-shrink-0">
+<span class="px-unit-2 py-0.5 rounded bg-surface-container text-secondary border border-secondary/30 font-label-sm text-label-sm font-bold">
+                      Passed (4.6mm)
+                    </span>
+</div>
+</div>
+</div>
+<!-- Action Buttons Area -->
+<div class="mt-unit-6 pt-unit-4 border-t border-outline-variant space-y-unit-3">
+<!-- Primary Action CTA -->
+<button class="w-full py-unit-3 px-unit-4 bg-primary text-on-primary rounded-lg font-title-md text-title-md flex items-center justify-center gap-unit-2 hover:bg-opacity-90 active:scale-[0.99] transition-all shadow-sm">
+<span class="material-symbols-outlined text-[20px] text-secondary-fixed" data-icon="neurology">neurology</span>
+<span>Run Deep Learning Diagnostic Analysis (OD Eye)</span>
+</button>
+<!-- Re-upload Utility Action -->
+<div class="flex items-center justify-between gap-unit-3">
+<button class="flex-1 py-unit-2 px-unit-3 bg-surface-container-lowest hover:bg-surface-container-low text-on-surface font-label-md text-label-md border border-outline-variant rounded-lg transition-colors flex items-center justify-center gap-unit-2">
+<span class="material-symbols-outlined text-[18px]" data-icon="restart_alt">restart_alt</span>
+                    Re-upload / Replace Image
+                  </button>
+<button class="py-unit-2 px-unit-3 text-error hover:bg-error-container/30 border border-transparent rounded-lg font-label-md text-label-md transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[18px]" data-icon="flag">flag</span>
+                    Flag Artifact
+                  </button>
+</div>
+</div>
+</div>
+<!-- Quick Audit Metadata Card -->
+<div class="p-unit-3 bg-surface-container-low rounded-lg border border-outline-variant flex items-center justify-between text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-unit-2">
+<span class="material-symbols-outlined text-[18px] text-secondary" data-icon="memory">memory</span>
+<span>Inference Engine: ResNet50-Fundus-v3.8 (FDA 510k)</span>
+</div>
+<span class="font-mono text-label-sm text-label-sm">HASH: 8f3c..b129</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- ========================================== -->
+<!-- CLINICAL FOOTER (Shared Component: Footer) -->
+<!-- ========================================== -->
+<footer class="w-full px-gutter-lg py-unit-4 flex flex-col md:flex-row justify-between items-center gap-unit-2 bg-surface-container-lowest dark:bg-primary-container border-t border-outline-variant dark:border-outline z-20">
+<div class="text-body-sm font-body-sm text-on-surface-variant dark:text-outline-variant text-center md:text-left">
+      © 2025 RetinaScan AI Technologies Inc. CE Mark Class IIa & FDA 510(k) Cleared Diagnostic Software. HIPAA & GDPR Compliant.
+    </div>
+<div class="flex flex-wrap items-center justify-center gap-x-unit-4 gap-y-unit-1 font-body-sm text-body-sm text-on-surface-variant dark:text-outline-variant">
+<a class="hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-150" href="#">Clinical Validation Study</a>
+<span class="text-outline-variant">•</span>
+<a class="hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-150" href="#">ICDR Diagnostic Guidelines</a>
+<span class="text-outline-variant">•</span>
+<a class="hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-150" href="#">HIPAA Privacy Protocols</a>
+<span class="text-outline-variant">•</span>
+<a class="hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-150" href="#">Technical Safety Manual</a>
+<span class="text-outline-variant">•</span>
+<a class="hover:text-secondary dark:hover:text-secondary-fixed transition-colors duration-150" href="#">Clinician Support Contact</a>
+</div>
+</footer>
+</body></html>

@@ -1,0 +1,162 @@
+/* RetinaScan AI - Institutional Clinical Design System */
+
+:root {
+  --font-headline: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --color-primary: #0F172A;
+  --color-secondary: #0D9488;
+  --color-accent: #06B6D4;
+  --color-danger: #B91C1C;
+  --color-warning: #B45309;
+  --color-success: #047857;
+  --color-bg: #F8FAFC;
+  --color-card: #FFFFFF;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: #0F172A;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, .font-headline {
+  font-family: var(--font-headline);
+}
+
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.material-symbols-outlined.fill-1 {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Retinal Inspection Canvas & Overlays */
+.retinal-viewport-container {
+  position: relative;
+  background-color: #020617;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.retinal-canvas {
+  cursor: grab;
+  touch-action: none;
+}
+
+.retinal-canvas:active {
+  cursor: grabbing;
+}
+
+/* Pulsing lesion marker animation */
+@keyframes lesion-pulse {
+  0% { transform: scale(0.95); opacity: 0.85; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+  70% { transform: scale(1.1); opacity: 1; box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+  100% { transform: scale(0.95); opacity: 0.85; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+.marker-pulse {
+  animation: lesion-pulse 2s infinite ease-in-out;
+}
+
+/* Mobile Simulation Container */
+.mobile-device-frame {
+  width: 390px;
+  height: 844px;
+  max-width: 100%;
+  border-radius: 44px;
+  border: 12px solid #1E293B;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 2px #334155;
+  background: #FFFFFF;
+  overflow: hidden;
+  position: relative;
+  margin: 0 auto;
+}
+
+.mobile-notch {
+  width: 120px;
+  height: 24px;
+  background: #1E293B;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+}
+
+/* Optical Filter Classes */
+.filter-red-free {
+  filter: contrast(135%) saturate(0%) brightness(105%) hue-rotate(90deg) invert(10%);
+}
+
+/* Signature Pad Canvas */
+#signature-canvas {
+  background-color: #FFFFFF;
+  border: 1px dashed #94A3B8;
+  border-radius: 4px;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F1F5F9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #CBD5E1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94A3B8;
+}
+
+/* PRINT & CLINICAL PDF REPORT STYLES */
+@media print {
+  body {
+    background-color: #FFFFFF !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+
+  .no-print,
+  nav,
+  header,
+  footer,
+  #global-header,
+  .print\\:hidden {
+    display: none !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+
+  .clinical-report-container {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: none !important;
+  }
+}
+
+.print-only {
+  display: none;
+}
