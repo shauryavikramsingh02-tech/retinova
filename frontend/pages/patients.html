@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Patient Directory - RetinaCare</title>
+  <meta name="description" content="Manage and register patients for retinal tele-ophthalmology screening.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/" class="nav-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2"/>
+            <path d="M2 12C3.8 6.6 7.6 3 12 3c4.4 0 8.2 3.6 10 9-1.8 5.4-5.6 9-10 9-4.4 0-8.2-3.6-10-9z" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-title">RetinaCare</span>
+          <span class="brand-subtitle">SIH PS 26038 &bull; Local Retinal Screening</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Dashboard</a></li>
+        <li><a href="/pages/patients.html" class="nav-link active">Patients</a></li>
+        <li><a href="/pages/new_screening.html" class="nav-link">New Screening</a></li>
+        <li><a href="/pages/screenings.html" class="nav-link">Screenings Log</a></li>
+      </ul>
+
+      <div class="nav-meta">
+        <div class="system-badge">
+          <div class="status-dot"></div>
+          <span>Local SQLite Database</span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Patient Registry</h1>
+        <p class="page-description">Search, review, and register patients for diabetic retinopathy screening.</p>
+      </div>
+      <div>
+        <button id="btn-open-patient-modal" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          Register New Patient
+        </button>
+      </div>
+    </div>
+
+    <!-- Search Bar Card -->
+    <div class="card" style="margin-bottom: 1.5rem; padding: 1rem 1.25rem;">
+      <div style="position: relative;">
+        <input
+          type="text"
+          id="patient-search"
+          class="form-input"
+          placeholder="Search by patient name, clinical ID (e.g. RC-2026-0001), or phone number..."
+          style="padding-left: 2.75rem;"
+        />
+        <svg style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; stroke: var(--text-dim); fill: none;" viewBox="0 0 24 24" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Patients Data Table -->
+    <div class="card">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Patient ID</th>
+              <th>Full Name & Phone</th>
+              <th>Demographics</th>
+              <th>Diabetic Profile</th>
+              <th>Screenings</th>
+              <th>Registered On</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="patients-tbody">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-dim); padding: 2rem;">
+                Loading registered patients from local database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Register Patient Modal -->
+  <div id="patient-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 style="font-size: 1.3rem; font-weight: 700; color: #ffffff;">Register New Patient</h2>
+        <button id="btn-close-modal" class="modal-close">&times;</button>
+      </div>
+
+      <form id="register-patient-form">
+        <div class="form-group">
+          <label class="form-label" for="p-fullname">Full Name *</label>
+          <input type="text" id="p-fullname" name="full_name" class="form-input" placeholder="e.g. Ramesh Kumar" required minlength="2">
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="p-age">Age *</label>
+            <input type="number" id="p-age" name="age" class="form-input" placeholder="e.g. 54" required min="1" max="120">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="p-gender">Gender *</label>
+            <select id="p-gender" name="gender" class="form-select" required>
+              <option value="">-- Select Gender --</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="p-phone">Phone Number</label>
+            <input type="tel" id="p-phone" name="contact_phone" class="form-input" placeholder="+91 98765 43210">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="p-email">Email Address</label>
+            <input type="email" id="p-email" name="contact_email" class="form-input" placeholder="patient@example.com">
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group">
+            <label class="form-label" for="p-dm-type">Diabetes Status</label>
+            <select id="p-dm-type" name="diabetes_type" class="form-select">
+              <option value="None">None</option>
+              <option value="Type 2" selected>Type 2 Diabetes</option>
+              <option value="Type 1">Type 1 Diabetes</option>
+              <option value="Gestational">Gestational Diabetes</option>
+              <option value="Pre-diabetes">Pre-diabetes</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="p-dm-dur">Diabetes Duration (Years)</label>
+            <input type="number" step="0.5" id="p-dm-dur" name="diabetes_duration_years" class="form-input" placeholder="e.g. 7.5">
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 0.5rem;">
+          <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+            <input type="checkbox" name="hypertension" style="width: 18px; height: 18px;">
+            <span>Diagnosed with Systemic Hypertension</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="p-medhist">Clinical History / Symptoms</label>
+          <textarea id="p-medhist" name="medical_history" class="form-textarea" rows="3" placeholder="Previous ocular history, current symptoms, laser treatments, or HbA1c history..."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+          <button type="button" class="btn btn-secondary" onclick="document.getElementById('patient-modal').classList.remove('active')">
+            Cancel
+          </button>
+          <button type="submit" class="btn btn-primary">
+            Save Patient Record
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>RetinaCare &bull; Patient Registry &bull; <span class="footer-highlight">Local SQLite Storage</span></div>
+    <div>SIH PS 26038</div>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/patients.js"></script>
+</body>
+</html>

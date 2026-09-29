@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal Login - RetinaCare</title>
+  <meta name="description" content="Administrative security console login for RetinaCare system management.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="auth-page">
+
+  <!-- Navbar -->
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/pages/login.html" class="nav-brand">
+        <div class="brand-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b); box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2"/>
+            <path d="M2 12C3.8 6.6 7.6 3 12 3c4.4 0 8.2 3.6 10 9-1.8 5.4-5.6 9-10 9-4.4 0-8.2-3.6-10-9z" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-title">RetinaCare</span>
+          <span class="brand-subtitle">Hospital Admin Console</span>
+        </div>
+      </a>
+
+      <div class="nav-meta">
+        <a href="/pages/login.html" class="btn btn-ghost btn-sm">
+          &larr; All Portals
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Login Container -->
+  <main class="auth-container">
+    <div class="auth-box">
+
+      <!-- Header Icon & Title -->
+      <div class="auth-header">
+        <div class="auth-header-icon admin-theme">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <h1 class="auth-title">Admin Console</h1>
+        <p class="auth-subtitle">Restricted hospital IT administration & user management portal</p>
+      </div>
+
+      <!-- Demo Autofill Helper -->
+      <div class="demo-credentials-pill" style="border-color: rgba(245, 158, 11, 0.3);">
+        <div>
+          <span style="color: var(--text-dim);">Evaluator Demo:</span>
+          <code style="color: #fbbf24; background: rgba(245, 158, 11, 0.1);">admin</code> / <code style="color: #fbbf24; background: rgba(245, 158, 11, 0.1);">admin123</code>
+        </div>
+        <button type="button" id="btn-autofill-admin" class="btn-autofill">
+          Auto Fill
+        </button>
+      </div>
+
+      <!-- Login Form -->
+      <form id="admin-login-form">
+        <div class="form-group" style="margin-bottom: 1.25rem;">
+          <label for="admin-username" class="form-label">Administrator ID or Email</label>
+          <input 
+            type="text" 
+            id="admin-username" 
+            name="username" 
+            class="form-control" 
+            placeholder="e.g. admin or admin@retinacare.local" 
+            required 
+            autocomplete="username"
+          />
+        </div>
+
+        <div class="form-group" style="margin-bottom: 1.5rem;">
+          <label for="admin-password" class="form-label">Security Key / Password</label>
+          <input 
+            type="password" 
+            id="admin-password" 
+            name="password" 
+            class="form-control" 
+            placeholder="••••••••" 
+            required 
+            autocomplete="current-password"
+          />
+        </div>
+
+        <div id="admin-error-alert" class="alert alert-danger" style="display: none; margin-bottom: 1.25rem; font-size: 0.85rem;"></div>
+
+        <button type="submit" id="btn-submit-admin" class="btn portal-btn" style="background: linear-gradient(135deg, #d97706, #f59e0b); color: #ffffff; width: 100%;">
+          <span id="btn-admin-text">Authenticate as Administrator</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        </button>
+      </form>
+
+      <!-- Switch Portal Links -->
+      <div class="portal-switch-links">
+        Need another portal?
+        <a href="/pages/login-doctor.html">Doctor Login</a> &bull;
+        <a href="/pages/login-patient.html">Patient Login</a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      RetinaCare &bull; <span class="footer-highlight" style="color: #fbbf24;">Administrative Security Gateway</span>
+    </div>
+    <div>Strict Audit Logging</div>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // If already logged in as admin, redirect to admin console
+      const existingUser = Auth.getUser();
+      if (existingUser && existingUser.role === 'admin') {
+        window.location.href = "/pages/admin.html";
+        return;
+      }
+
+      const form = document.getElementById("admin-login-form");
+      const usernameInput = document.getElementById("admin-username");
+      const passwordInput = document.getElementById("admin-password");
+      const autofillBtn = document.getElementById("btn-autofill-admin");
+      const errorAlert = document.getElementById("admin-error-alert");
+      const submitBtn = document.getElementById("btn-submit-admin");
+      const btnAdminText = document.getElementById("btn-admin-text");
+
+      autofillBtn.addEventListener("click", () => {
+        usernameInput.value = "admin";
+        passwordInput.value = "admin123";
+        errorAlert.style.display = "none";
+      });
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        errorAlert.style.display = "none";
+
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+        if (!username || !password) return;
+
+        btnAdminText.textContent = "Verifying Security Credentials...";
+        submitBtn.disabled = true;
+
+        try {
+          const res = await AuthAPI.login(username, password, "admin");
+          Auth.setSession(res.token, res.user);
+          showToast(`Admin session authenticated: ${res.user.full_name}`, "success");
+          setTimeout(() => {
+            window.location.href = "/pages/admin.html";
+          }, 600);
+        } catch (err) {
+          errorAlert.textContent = err.message || "Administrative authentication failed.";
+          errorAlert.style.display = "block";
+          submitBtn.disabled = false;
+          btnAdminText.textContent = "Authenticate as Administrator";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

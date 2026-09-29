@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screenings Log - RetinaCare</title>
+  <meta name="description" content="Chronological archive of all retinal tele-ophthalmology screening sessions.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/" class="nav-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2"/>
+            <path d="M2 12C3.8 6.6 7.6 3 12 3c4.4 0 8.2 3.6 10 9-1.8 5.4-5.6 9-10 9-4.4 0-8.2-3.6-10-9z" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-title">RetinaCare</span>
+          <span class="brand-subtitle">SIH PS 26038 &bull; Local Retinal Screening</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Dashboard</a></li>
+        <li><a href="/pages/patients.html" class="nav-link">Patients</a></li>
+        <li><a href="/pages/new_screening.html" class="nav-link">New Screening</a></li>
+        <li><a href="/pages/screenings.html" class="nav-link active">Screenings Log</a></li>
+      </ul>
+
+      <div class="nav-meta">
+        <div class="system-badge">
+          <div class="status-dot"></div>
+          <span>Offline SQLite Storage</span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Retinal Screenings Archive</h1>
+        <p id="screenings-subtitle" class="page-description">Complete history of bilateral ocular screenings and quality gate reports.</p>
+      </div>
+      <div>
+        <a href="/pages/new_screening.html" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Start New Screening
+        </a>
+      </div>
+    </div>
+
+    <!-- Filter Buttons Bar -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap;">
+      <button class="btn btn-secondary btn-sm filter-btn active" data-status="all">All Screenings</button>
+      <button class="btn btn-secondary btn-sm filter-btn" data-status="passed">Passed Quality Gate</button>
+      <button class="btn btn-secondary btn-sm filter-btn" data-status="warning">Quality Warnings</button>
+      <button class="btn btn-secondary btn-sm filter-btn" data-status="retake required">Retake Required</button>
+    </div>
+
+    <!-- Screenings Table Card -->
+    <div class="card">
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Screening ID</th>
+              <th>Patient</th>
+              <th>Bilateral Preview (OS / OD)</th>
+              <th>Screening Date</th>
+              <th>Quality Status</th>
+              <th>Predicted DR Stage</th>
+              <th>Clinical Notes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="screenings-tbody">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-dim); padding: 2.5rem;">
+                Loading screening archives from local database...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>RetinaCare &bull; Screenings Archive &bull; <span class="footer-highlight">Local Execution</span></div>
+    <div>SIH PS 26038</div>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/screenings.js"></script>
+</body>
+</html>

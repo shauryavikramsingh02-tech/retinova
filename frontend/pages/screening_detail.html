@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Screening Inspection &amp; Grad-CAM - RetinaCare</title>
+  <meta name="description" content="Detailed ocular screening inspection report with PyTorch Grad-CAM explainability and OpenCV quality verification.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/" class="nav-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2"/>
+            <path d="M2 12C3.8 6.6 7.6 3 12 3c4.4 0 8.2 3.6 10 9-1.8 5.4-5.6 9-10 9-4.4 0-8.2-3.6-10-9z" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-title">RetinaCare</span>
+          <span class="brand-subtitle">SIH PS 26038 &bull; Local Retinal Screening</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link">Dashboard</a></li>
+        <li><a href="/pages/patients.html" class="nav-link">Patients</a></li>
+        <li><a href="/pages/new_screening.html" class="nav-link">New Screening</a></li>
+        <li><a href="/pages/screenings.html" class="nav-link">Screenings Log</a></li>
+      </ul>
+
+      <div class="nav-meta">
+        <div id="detail-quality-badge"></div>
+        <div id="detail-ai-badge"></div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <h1 class="page-title">Retinal Screening &amp; Grad-CAM Analysis</h1>
+          <span id="detail-screening-id" style="font-size: 1.1rem; color: var(--accent-cyan); font-weight: 700;">Loading...</span>
+        </div>
+        <p id="detail-screening-date" class="page-description">Recorded date loading...</p>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <button id="btn-rerun-ai" class="btn btn-primary btn-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+          Re-run PyTorch &amp; Grad-CAM
+        </button>
+        <a href="/pages/screenings.html" class="btn btn-secondary btn-sm">
+          &larr; Screenings Log
+        </a>
+      </div>
+    </div>
+
+    <!-- Patient Demographics & Exam Summary Card -->
+    <section class="card" style="margin-bottom: 2rem;">
+      <h2 class="card-title" style="margin-bottom: 1rem;">Patient Profile &amp; Clinical Summary</h2>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem;">
+        <div>
+          <div class="stat-label">Full Name</div>
+          <div id="p-name" style="font-size: 1.1rem; font-weight: 600; color: #ffffff; margin-top: 0.2rem;">--</div>
+          <div id="p-code" style="font-size: 0.8rem; color: var(--accent-cyan); font-weight: 600;">--</div>
+        </div>
+        <div>
+          <div class="stat-label">Age &amp; Gender</div>
+          <div id="p-age-gender" style="font-size: 1rem; font-weight: 500; color: var(--text-main); margin-top: 0.2rem;">--</div>
+        </div>
+        <div>
+          <div class="stat-label">Diabetic History</div>
+          <div id="p-diabetes" style="font-size: 1rem; font-weight: 500; color: var(--text-main); margin-top: 0.2rem;">--</div>
+        </div>
+        <div>
+          <div class="stat-label">Systemic BP</div>
+          <div id="p-htn" style="font-size: 1rem; font-weight: 500; color: var(--text-main); margin-top: 0.2rem;">--</div>
+        </div>
+        <div>
+          <div class="stat-label">Visual Acuity</div>
+          <div style="font-size: 0.95rem; font-weight: 500; color: var(--text-main); margin-top: 0.2rem;">
+            OS: <strong id="va-os-display">--</strong> | OD: <strong id="va-od-display">--</strong>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid var(--border-subtle); font-size: 0.85rem;">
+        <span style="color: var(--text-muted); font-weight: 600;">Clinical Notes: </span>
+        <span id="p-notes" style="color: var(--text-main);">--</span>
+      </div>
+    </section>
+
+    <!-- Bilateral Fundus & Grad-CAM Analysis -->
+    <h2 style="font-size: 1.3rem; font-weight: 700; color: #ffffff; margin-bottom: 1.25rem;">
+      Bilateral Explainability: Original Image &bull; Grad-CAM Heatmap &bull; Superimposed Overlay
+    </h2>
+
+    <div style="display: flex; flex-direction: column; gap: 2rem; margin-bottom: 2rem;">
+
+      <!-- ================= Left Eye (OS) ================= -->
+      <div class="card" style="padding: 1.5rem; border-left: 4px solid #38bdf8;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <div style="font-size: 1.2rem; font-weight: 700; color: #38bdf8;">
+            Left Eye (OS - Oculus Sinister)
+          </div>
+          <div id="os-prediction-badge"></div>
+        </div>
+
+        <!-- Prediction & Confidence Box -->
+        <div id="os-prediction-box" class="prediction-summary-box">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span class="stat-label">Predicted Severity Stage</span>
+              <div id="os-predicted-class-name" style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-top: 0.2rem;">Analyzing...</div>
+            </div>
+            <div style="text-align: right;">
+              <span class="stat-label">Model Confidence</span>
+              <div id="os-confidence-value" style="font-size: 1.25rem; font-weight: 700; color: var(--accent-cyan); margin-top: 0.2rem;">--%</div>
+            </div>
+          </div>
+          <div class="confidence-bar-container">
+            <div id="os-confidence-bar" class="confidence-bar-fill" style="width: 0%;"></div>
+          </div>
+          <div id="os-prob-breakdown" class="prob-distribution-list"></div>
+        </div>
+
+        <!-- 3-Way Visual Display: Original, Heatmap, Overlay -->
+        <div class="tri-view-grid">
+          <div class="tri-view-card">
+            <div class="tri-view-title">1. Original Image (OS)</div>
+            <div class="tri-view-img-box">
+              <img id="img-os-original" src="" alt="Left Eye Original Fundus" />
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem;">Input Fundus Photograph</div>
+          </div>
+
+          <div class="tri-view-card">
+            <div class="tri-view-title">2. Grad-CAM Heatmap (OS)</div>
+            <div class="tri-view-img-box">
+              <img id="img-os-heatmap" src="" alt="Left Eye Grad-CAM Heatmap" />
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem;">Backpropagated Activation Map</div>
+          </div>
+
+          <div class="tri-view-card">
+            <div class="tri-view-title">3. Grad-CAM Overlay (OS)</div>
+            <div class="tri-view-img-box">
+              <img id="img-os-overlay" src="" alt="Left Eye Grad-CAM Overlay" />
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem;">Superimposed Retinal Focus</div>
+          </div>
+        </div>
+
+        <!-- Quality Metrics for Left Eye -->
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+          <h3 style="font-size: 0.95rem; font-weight: 600; color: #ffffff; margin-bottom: 0.5rem;">OpenCV Computer Vision Quality Gate (OS)</h3>
+          <div id="quality-metrics-os"></div>
+        </div>
+      </div>
+
+      <!-- ================= Right Eye (OD) ================= -->
+      <div class="card" style="padding: 1.5rem; border-left: 4px solid #06b6d4;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border-subtle);">
+          <div style="font-size: 1.2rem; font-weight: 700; color: #06b6d4;">
+            Right Eye (OD - Oculus Dexter)
+          </div>
+          <div id="od-prediction-badge"></div>
+        </div>
+
+        <!-- Prediction & Confidence Box -->
+        <div id="od-prediction-box" class="prediction-summary-box">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span class="stat-label">Predicted Severity Stage</span>
+              <div id="od-predicted-class-name" style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-top: 0.2rem;">Analyzing...</div>
+            </div>
+            <div style="text-align: right;">
+              <span class="stat-label">Model Confidence</span>
+              <div id="od-confidence-value" style="font-size: 1.25rem; font-weight: 700; color: var(--accent-teal); margin-top: 0.2rem;">--%</div>
+            </div>
+          </div>
+          <div class="confidence-bar-container">
+            <div id="od-confidence-bar" class="confidence-bar-fill" style="width: 0%;"></div>
+          </div>
+          <div id="od-prob-breakdown" class="prob-distribution-list"></div>
+        </div>
+
+        <!-- 3-Way Visual Display: Original, Heatmap, Overlay -->
+        <div class="tri-view-grid">
+          <div class="tri-view-card">
+            <div class="tri-view-title">1. Original Image (OD)</div>
+            <div class="tri-view-img-box">
+              <img id="img-od-original" src="" alt="Right Eye Original Fundus" />
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem;">Input Fundus Photograph</div>
+          </div>
+
+          <div class="tri-view-card">
+            <div class="tri-view-title">2. Grad-CAM Heatmap (OD)</div>
+            <div class="tri-view-img-box">
+              <img id="img-od-heatmap" src="" alt="Right Eye Grad-CAM Heatmap" />
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem;">Backpropagated Activation Map</div>
+          </div>
+
+          <div class="tri-view-card">
+            <div class="tri-view-title">3. Grad-CAM Overlay (OD)</div>
+            <div class="tri-view-img-box">
+              <img id="img-od-overlay" src="" alt="Right Eye Grad-CAM Overlay" />
+            </div>
+            <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 0.5rem;">Superimposed Retinal Focus</div>
+          </div>
+        </div>
+
+        <!-- Quality Metrics for Right Eye -->
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-subtle);">
+          <h3 style="font-size: 0.95rem; font-weight: 600; color: #ffffff; margin-bottom: 0.5rem;">OpenCV Computer Vision Quality Gate (OD)</h3>
+          <div id="quality-metrics-od"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Explainability Methodology & Medical Integrity Notice -->
+    <section class="card" style="border-color: rgba(56, 189, 248, 0.3); background: linear-gradient(135deg, rgba(28, 37, 65, 0.95), rgba(15, 23, 42, 0.95));">
+      <div style="display: flex; gap: 1.25rem; align-items: flex-start;">
+        <div style="width: 48px; height: 48px; border-radius: 12px; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+        </div>
+        <div>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: #ffffff; margin-bottom: 0.35rem;">
+            Authentic PyTorch Grad-CAM Methodology (Selvaraju et al.)
+          </h3>
+          <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>Zero Artificial or Random Highlights:</strong> The heatmaps above are generated dynamically by computing gradients &part;y<sup>c</sup> / &part;A<sup>k</sup> on the target convolutional layer (<code>layer4.conv2</code>) with respect to the predicted DR class score. Feature activations are pooled via global average pooling and rectified with ReLU to highlight the salient vascular regions that dictated the classification. Heatmaps and overlays are saved locally in <code>data/processed/</code>.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>RetinaCare &bull; Grad-CAM Explainability &bull; <span class="footer-highlight">Local PyTorch Inference</span></div>
+    <div>SIH PS 26038</div>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/screening_detail.js"></script>
+</body>
+</html>

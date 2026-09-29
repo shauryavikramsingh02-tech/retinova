@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetinaCare - AI Retinal Screening System | SIH PS 26038</title>
+  <meta name="description" content="Local offline AI retinal screening and OpenCV quality gate platform for tele-ophthalmology.">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <nav class="navbar" aria-label="Main Navigation">
+      <a href="/" class="nav-brand">
+        <div class="brand-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2"/>
+            <path d="M2 12C3.8 6.6 7.6 3 12 3c4.4 0 8.2 3.6 10 9-1.8 5.4-5.6 9-10 9-4.4 0-8.2-3.6-10-9z" stroke-width="2"/>
+          </svg>
+        </div>
+        <div class="brand-titles">
+          <span class="brand-title">RetinaCare</span>
+          <span class="brand-subtitle">SIH PS 26038 &bull; Local Retinal Screening</span>
+        </div>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="/" class="nav-link active">Dashboard</a></li>
+        <li><a href="/pages/patients.html" class="nav-link">Patients</a></li>
+        <li><a href="/pages/new_screening.html" class="nav-link">New Screening</a></li>
+        <li><a href="/pages/screenings.html" class="nav-link">Screenings Log</a></li>
+      </ul>
+
+      <div class="nav-meta">
+        <div id="system-status-indicator" class="system-badge">
+          <div class="status-dot"></div>
+          <span>Connecting to Local SQLite...</span>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Clinician Dashboard</h1>
+        <p class="page-description">
+          100% Local retinal tele-ophthalmology screening platform. Local SQLite storage &bull; OpenCV Quality Gate &bull; PyTorch Local Inference.
+        </p>
+      </div>
+      <div style="display: flex; gap: 0.75rem;">
+        <a href="/pages/new_screening.html" class="btn btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+          Start Screening
+        </a>
+        <a href="/pages/patients.html" class="btn btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          Patient Registry
+        </a>
+      </div>
+    </div>
+
+    <!-- Summary Metrics Grid -->
+    <section class="stats-grid" aria-label="Key Performance Indicators">
+      <div class="stat-card">
+        <div class="stat-icon blue">
+          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Total Registered Patients</span>
+          <span id="stat-total-patients" class="stat-value">--</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon cyan">
+          <svg viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/></svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Total Screenings Performed</span>
+          <span id="stat-total-screenings" class="stat-value">--</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon green">
+          <svg viewBox="0 0 24 24" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Quality Gate Pass Rate</span>
+          <span id="stat-pass-rate" class="stat-value">--%</span>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon amber">
+          <svg viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <div class="stat-content">
+          <span class="stat-label">Screenings Today</span>
+          <span id="stat-today-screenings" class="stat-value">--</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture & Foundation Guarantee Notice -->
+    <div class="card" style="margin-bottom: 2rem; background: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.9)); border-color: rgba(56, 189, 248, 0.2);">
+      <div style="display: flex; gap: 1.25rem; align-items: flex-start;">
+        <div style="width: 44px; height: 44px; border-radius: 10px; background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div>
+          <h2 style="font-size: 1.1rem; color: #ffffff; margin-bottom: 0.25rem;">Smart India Hackathon 2024 &bull; Problem Statement 26038</h2>
+          <p style="font-size: 0.875rem; color: var(--text-muted); line-height: 1.6;">
+            <strong>Local Foundation Architecture Active:</strong> Running on Windows <code>localhost:8000</code>. Primary storage is local <strong>SQLite</strong> with zero cloud database dependency. Image quality verification utilizes local <strong>OpenCV</strong> (Laplacian sharpness, illumination uniformity, and retinal FOV aperture segmentation). Images are stored safely on the local filesystem.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Screenings Table -->
+    <section class="card" aria-label="Recent Screening Sessions">
+      <div class="card-title">
+        <span>Recent Screening Sessions</span>
+        <a href="/pages/screenings.html" class="btn btn-ghost btn-sm">View All Screenings &rarr;</a>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Screening ID</th>
+              <th>Patient</th>
+              <th>Fundus Preview (OS / OD)</th>
+              <th>Screening Date</th>
+              <th>Quality Gate</th>
+              <th>Local AI Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="recent-screenings-tbody">
+            <tr>
+              <td colspan="7" style="text-align: center; color: var(--text-dim); padding: 2rem;">
+                Loading recent screenings...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div>
+      RetinaCare &bull; Smart India Hackathon (SIH PS 26038) &bull; <span class="footer-highlight">Localhost Edition</span>
+    </div>
+    <div>
+      FastAPI &bull; SQLite &bull; OpenCV &bull; PyTorch
+    </div>
+  </footer>
+
+  <div id="toast-container"></div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/auth.js"></script>
+  <script src="/js/dashboard.js"></script>
+</body>
+</html>
